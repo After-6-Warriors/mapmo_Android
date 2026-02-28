@@ -161,7 +161,6 @@ private fun LabelItem(
             .padding(horizontal = 16.dp),
     ) {
         Text(
-            modifier = modifier,
             text = labelName,
             color = labelColor,
             fontSize = 18.sp,
