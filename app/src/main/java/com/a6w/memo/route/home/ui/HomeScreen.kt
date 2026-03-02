@@ -65,7 +65,10 @@ fun HomeScreen(
         scaffoldState = scaffoldState,
         sheetDragHandle = { BottomSheetDefaults.DragHandle() },
         sheetPeekHeight = BOTTOM_SHEET_HEIGHT_MINIMUM_DP,
-        sheetShape = RoundedCornerShape(BOTTOM_SHEET_RADIUS_DP),
+        sheetShape = RoundedCornerShape(
+            topStart = BOTTOM_SHEET_RADIUS_DP,
+            topEnd = BOTTOM_SHEET_RADIUS_DP,
+        ),
         sheetContent = {
             // Mapmo List
             Box(
