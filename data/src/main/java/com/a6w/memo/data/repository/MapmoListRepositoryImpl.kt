@@ -139,7 +139,7 @@ class MapmoListRepositoryImpl: MapmoListRepository {
 
             // Store in cache
             mapmoListCache[userID] = mapmoListResult
-            println(mapmoListResult)
+
             // Return final MapmoList result
             return mapmoListResult
         } catch (e: Exception) {
