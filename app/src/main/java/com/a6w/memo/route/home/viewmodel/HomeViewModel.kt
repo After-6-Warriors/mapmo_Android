@@ -83,34 +83,12 @@ class HomeViewModel @Inject constructor(
                 mapmoList?.list?.forEach { mapmoGroup ->
                     // Label Item
                     mapmoGroup.labelItem?.let { label ->
-                        val labelColor = label.color
-                        val labelID = label.id
-                        val labelName = label.name
-
-                        add(
-                            HomeListUiItem.LabelUiItem(
-                                labelColor = labelColor,
-                                labelID = labelID,
-                                labelName = labelName,
-                            )
-                        )
+                        add(label.toUiItem())
                     }
 
                     // Each Mapmo Items
                     mapmoGroup.mapmoList.forEach { mapmo ->
-                        val mapmoID = mapmo.mapmoID
-                        val mapmoLocation = mapmo.location
-                        val mapmoTitle = mapmo.title
-                        val mapmoUpdatedAt = DatetimeUtil.getUiDateStringFromMillis(mapmo.updatedAt)
-
-                        add(
-                            HomeListUiItem.MapmoUiItem(
-                                mapmoID = mapmoID,
-                                mapmoLocation = mapmoLocation,
-                                mapmoTitle = mapmoTitle,
-                                mapmoUpdatedAt = mapmoUpdatedAt,
-                            )
-                        )
+                        add(mapmo.toUiItem())
                     }
                 }
             }
@@ -143,7 +121,6 @@ class HomeViewModel @Inject constructor(
     private suspend fun getMapmoList(): MapmoList? {
         // Get mapmo list from repository
         val mapmoList = mapmoListRepository.getMapmoList(TEST_USER_ID)
-
         return mapmoList
     }
 
@@ -156,21 +133,58 @@ class HomeViewModel @Inject constructor(
         // Generate marker list from mapmo list instance
         val markerList = mapmoList?.list?.flatMap { listItem ->
             listItem.mapmoList.map { mapmo ->
-                val mapmoLocation = mapmo.location
-                val mapmoLocationLat = mapmoLocation.lat.toFloat()
-                val mapmoLocationLng = mapmoLocation.lng.toFloat()
-                val mapmoTitle = mapmo.content
-
-                val markerData = MapMarkerData(
-                    latitude = mapmoLocationLat,
-                    longitude = mapmoLocationLng,
-                    markerTitle = mapmoTitle,
-                )
-
-                markerData
+                mapmo.toMapMarkerData()
             }
         }
 
         return markerList
+    }
+
+    /**
+     * Convert [Label] to [HomeListUiItem.LabelUiItem]
+     */
+    private fun Label.toUiItem(): HomeListUiItem.LabelUiItem {
+        val labelColor = this.color
+        val labelID = this.id
+        val labelName = this.name
+
+        return HomeListUiItem.LabelUiItem(
+            labelColor = labelColor,
+            labelID = labelID,
+            labelName = labelName,
+        )
+    }
+
+    /**
+     * Convert [Mapmo] to [HomeListUiItem.MapmoUiItem]
+     */
+    private fun Mapmo.toUiItem(): HomeListUiItem.MapmoUiItem {
+        val mapmoID = this.mapmoID
+        val mapmoLocation = this.location
+        val mapmoTitle = this.title
+        val mapmoUpdatedAt = DatetimeUtil.getUiDateStringFromMillis(this.updatedAt * 1000)
+
+        return HomeListUiItem.MapmoUiItem(
+            mapmoID = mapmoID,
+            mapmoLocation = mapmoLocation,
+            mapmoTitle = mapmoTitle,
+            mapmoUpdatedAt = mapmoUpdatedAt,
+        )
+    }
+
+    /**
+     * Convert [Mapmo] to [MapMarkerData]
+     */
+    private fun Mapmo.toMapMarkerData(): MapMarkerData {
+        val mapmoTitle = this.content
+        val mapmoLocation = this.location
+        val mapmoLocationLat = mapmoLocation.lat.toFloat()
+        val mapmoLocationLng = mapmoLocation.lng.toFloat()
+
+        return MapMarkerData(
+            latitude = mapmoLocationLat,
+            longitude = mapmoLocationLng,
+            markerTitle = mapmoTitle,
+        )
     }
 }
