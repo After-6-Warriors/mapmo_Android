@@ -22,5 +22,7 @@ kotlin {
 dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.firestore)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.gson)
     implementation(project(":domain"))
 }
