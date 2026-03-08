@@ -24,5 +24,6 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
+    implementation(libs.javax.inject)
     implementation(project(":domain"))
 }
