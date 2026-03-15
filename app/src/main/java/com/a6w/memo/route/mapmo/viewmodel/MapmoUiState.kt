@@ -11,7 +11,6 @@ data class MapmoUiState(
     val currentLabelID: String? = null,
     val labelName: String? = null,
     val labelColor: String? = null,
-    val location: Location? = null,
     val isLoading: Boolean = false,
     val isEditing: Boolean = false,
     val isLabelListLoading: Boolean = false,
